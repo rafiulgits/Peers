@@ -32,6 +32,7 @@ public class FileSender implements IO, Runnable {
     public void run() {
         if(!SocketHandler.isEastablished()){
             handler.obtainMessage(SOCKET_ERROR).sendToTarget();
+            return;
         }
         Socket socket = SocketHandler.getSocket();
 
@@ -66,7 +67,9 @@ public class FileSender implements IO, Runnable {
                 }
                 handler.obtainMessage(FILE_SENT);
 
-
+                if(!fileQueue.hasItem()){
+                    dataOutputStream.writeShort(SENDING_QUEUE_CLEARED);
+                }
 
             } catch (IOException ex){
                 handler.obtainMessage(SOCKET_ERROR).sendToTarget();

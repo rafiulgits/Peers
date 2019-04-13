@@ -14,6 +14,7 @@ public interface IO {
 
     public static final int FILE_INFO = 7;
     public static final int SENDING_QUEUE_CLEARED = 8;
+    public static final int ERROR = 0;
 
     public void execute();
 }
