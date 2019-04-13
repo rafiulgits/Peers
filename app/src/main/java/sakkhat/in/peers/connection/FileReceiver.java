@@ -14,7 +14,7 @@ import java.net.Socket;
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class FileReceiver implements  IO, Cloneable {
+public class FileReceiver implements Listener, Cloneable {
     private static final String PATH = Environment.getExternalStorageDirectory()+"/p2p";
 
     private Handler handler;
@@ -29,11 +29,11 @@ public class FileReceiver implements  IO, Cloneable {
 
     @Override
     public void execute() {
-        if(! SocketHandler.isEastablished()){
+        if(! ConnectionManager.isEastablished()){
             handler.obtainMessage(SOCKET_ERROR).sendToTarget();
             return;
         }
-        Socket socket = SocketHandler.getSocket();
+        Socket socket = ConnectionManager.getSocket();
         try {
             DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(dataInputStream);

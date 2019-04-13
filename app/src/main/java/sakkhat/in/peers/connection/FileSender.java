@@ -13,7 +13,7 @@ import java.net.Socket;
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class FileSender implements IO, Runnable {
+public class FileSender implements Listener, Runnable {
 
     private Thread engine;
     private Handler handler;
@@ -30,11 +30,11 @@ public class FileSender implements IO, Runnable {
 
     @Override
     public void run() {
-        if(!SocketHandler.isEastablished()){
+        if(!ConnectionManager.isEastablished()){
             handler.obtainMessage(SOCKET_ERROR).sendToTarget();
             return;
         }
-        Socket socket = SocketHandler.getSocket();
+        Socket socket = ConnectionManager.getSocket();
 
         while (fileQueue.hasItem()){
             try{

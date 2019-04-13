@@ -1,66 +1,21 @@
 package sakkhat.in.peers.connection;
 
-import android.os.Handler;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.net.Socket;
-
 /**
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class Listener implements IO, Runnable {
+public interface Listener {
+    public static final int SOCKET_ERROR = 1;
+    public static final int FILE_RECEIVE_REQUEST = 2;
+    public static final int FILE_RECEIVING_PROGRESS = 3;
+    public static final int FILE_RECEIVED = 4;
+    public static final int FILE_SENDING_PROGRESS = 5;
+    public static final int FILE_SENT = 6;
 
-    private Thread engine;
-    private Handler handler;
-    private FileReceiver fileReceiver;
+    public static final int FILE_INFO = 7;
+    public static final int SENDING_QUEUE_CLEARED = 8;
+    public static final int ERROR = 0;
+    public static final int SOCKET_ESTABLISHED = 9;
 
-    private Listener(Handler handler){
-        this.handler = handler;
-        fileReceiver = FileReceiver.init(handler);
-    }
-
-    public Listener init(Handler handler){
-        return new Listener(handler);
-    }
-
-    @Override
-    public void run() {
-        if(! SocketHandler.isEastablished()){
-            handler.obtainMessage(SOCKET_ERROR);
-            return;
-        }
-        Socket socket = SocketHandler.getSocket();
-
-        try {
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-            short command;
-            while (socket != null || socket.isConnected()){
-
-                command = dataInputStream.readShort();
-                switch (command){
-                    case FILE_RECEIVE_REQUEST:
-                        FileReceiver fileReceiverClone = (FileReceiver) fileReceiver.clone();
-                        if(fileReceiverClone != null){
-                            fileReceiverClone.execute();
-                        }
-                        else{
-                            handler.obtainMessage(ERROR);
-                        }break;
-                    default:continue;
-                }
-
-
-            }
-        } catch (IOException ex){
-            handler.obtainMessage(SOCKET_ERROR);
-        }
-    }
-
-    @Override
-    public void execute() {
-        engine = new Thread(this);
-        engine.start();
-    }
+    public void execute();
 }

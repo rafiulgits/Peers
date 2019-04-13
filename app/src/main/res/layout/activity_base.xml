@@ -2,16 +2,55 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_base"
+    android:background="@color/jarvis"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sakkhat.in.peers.Base">
 
+    <ListView
+        android:id="@+id/baseDeviceListView"
+        android:visibility="gone"
+        android:layout_above="@id/baseSearchButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+
     <TextView
+        android:id="@+id/baseText"
+        android:text="Lets\nConnect\nTogether"
+        android:textColor="#fff"
+        android:layout_alignParentTop="true"
+        android:textSize="50sp"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/baseSearchingProgress"
+        android:visibility="gone"
+        android:indeterminate="true"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <Button
+        android:id="@+id/baseSearchButton"
+        android:backgroundTint="#fff"
+        android:paddingTop="20sp"
+        android:paddingBottom="20sp"
+        android:textSize="20sp"
+        android:text="Search Nearby Device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>
