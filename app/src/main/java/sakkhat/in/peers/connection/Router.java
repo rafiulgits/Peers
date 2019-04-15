@@ -4,12 +4,11 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import sakkhat.in.peers.pages.Index;
+import sakkhat.in.peers.views.Index;
 
 /**
  * Created by Rafiul Islam on 13-Apr-19.

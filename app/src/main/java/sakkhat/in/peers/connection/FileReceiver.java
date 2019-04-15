@@ -15,7 +15,7 @@ import java.net.Socket;
  */
 
 public class FileReceiver implements Listener, Cloneable {
-    private static final String PATH = Environment.getExternalStorageDirectory()+"/p2p";
+    public static String PATH = Environment.getExternalStorageDirectory()+"/p2p";
 
     private Handler handler;
 

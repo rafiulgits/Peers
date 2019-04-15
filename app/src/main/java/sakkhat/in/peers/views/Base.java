@@ -1,5 +1,6 @@
-package sakkhat.in.peers;
+package sakkhat.in.peers.views;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,13 +27,13 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import sakkhat.in.peers.R;
 import sakkhat.in.peers.adapter.DeviceListAdapter;
 import sakkhat.in.peers.broadcaster.WiFiStateReceiver;
 import sakkhat.in.peers.connection.Listener;
 import sakkhat.in.peers.connection.ConnectionManager;
 import sakkhat.in.peers.connection.P2P;
 import sakkhat.in.peers.generic.Permission;
-import sakkhat.in.peers.pages.Index;
 
 public class Base
         extends AppCompatActivity
@@ -105,6 +106,7 @@ public class Base
             }
         });
     }
+
 
     private void initConnectionInterface(){
         p2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
