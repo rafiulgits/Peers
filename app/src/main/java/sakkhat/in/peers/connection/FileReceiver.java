@@ -85,6 +85,11 @@ public class FileReceiver implements Listener, Cloneable {
     }
 
     @Override
+    public void terminate(){
+
+    }
+
+    @Override
     public Object clone(){
         try{
             return super.clone();

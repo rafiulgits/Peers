@@ -18,6 +18,8 @@ public class Permission {
     public static final int ACCESS_WIFI_STATE = 5;
     public static final int CHANGE_WIFI_STATE = 6;
     public static final int RECORD_AUDIO = 7;
+    public static final int ACCESS_NETWORK_STATE = 8;
+    public static final int CHANEGE_NETWORK_STATE = 9;
 
     public static boolean has(Context context, int label){
         switch (label){
@@ -58,6 +60,20 @@ public class Permission {
                     return false;
                 } return true;
 
+
+            case ACCESS_NETWORK_STATE:
+                if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
+                        !=PackageManager.PERMISSION_GRANTED){
+                    return false;
+                } return true;
+
+
+            case CHANEGE_NETWORK_STATE:
+                if(ContextCompat.checkSelfPermission(context, Manifest.permission.CHANGE_NETWORK_STATE)
+                        !=PackageManager.PERMISSION_GRANTED){
+                    return false;
+                } return true;
+
         }
 
         return false;
@@ -88,6 +104,15 @@ public class Permission {
             case RECORD_AUDIO:
                 ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.RECORD_AUDIO},requestCode);
                 break;
+
+            case ACCESS_NETWORK_STATE:
+                ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.ACCESS_NETWORK_STATE},requestCode);
+                break;
+
+            case CHANEGE_NETWORK_STATE:
+                ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CHANGE_NETWORK_STATE},requestCode);
+                break;
+
 
         }
 

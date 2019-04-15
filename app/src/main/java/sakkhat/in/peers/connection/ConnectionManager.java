@@ -1,7 +1,9 @@
 package sakkhat.in.peers.connection;
 
 import android.net.wifi.p2p.WifiP2pManager;
+import android.util.Log;
 
+import java.io.IOException;
 import java.net.Socket;
 
 /**
@@ -9,6 +11,8 @@ import java.net.Socket;
  */
 
 public class ConnectionManager {
+
+    private static final String TAG = "connection_manager";
 
     private static Socket socket;
     private static WifiP2pManager p2pManager;
@@ -42,5 +46,10 @@ public class ConnectionManager {
 
     public static synchronized WifiP2pManager.Channel getP2pChannel(){
         return ConnectionManager.p2pChannel;
+    }
+
+    public static void disconnect(WifiP2pManager.ActionListener actionListener){
+        socket = null;
+        p2pManager.removeGroup(p2pChannel, actionListener);
     }
 }

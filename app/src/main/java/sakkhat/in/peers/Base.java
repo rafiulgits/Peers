@@ -1,5 +1,6 @@
 package sakkhat.in.peers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -26,6 +26,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import sakkhat.in.peers.adapter.DeviceListAdapter;
 import sakkhat.in.peers.broadcaster.WiFiStateReceiver;
 import sakkhat.in.peers.connection.Listener;
 import sakkhat.in.peers.connection.ConnectionManager;
@@ -45,6 +46,11 @@ public class Base
 
     private static final int PERMISSION_FILE_READ = 1001;
     private static final int PERMISSION_FILE_WRITE = 1002;
+    private static final int PERMISSION_ACCESS_WIFI_STATE = 1003;
+    private static final int PERMISSION_CHANGE_WIFI_STATE = 1004;
+    private static final int PERMISSION_INTERNET = 1005;
+    private static final int PERMISSION_ACCESS_NETWORK_STATE = 1006;
+    private static final int PERMISSOIN_CHANGE_NETWORK_STATE = 1007;
 
     private TextView baseText;
     private ListView deviceListView;
@@ -58,8 +64,8 @@ public class Base
     private WifiP2pManager.Channel p2pChannel;
 
     private List<WifiP2pDevice> discoverPeers;
-    private ArrayList<String> deviceNameList;
-    private ArrayAdapter<String> deviceListAdapter;
+    private List<String> deviceNameList;
+    private DeviceListAdapter deviceListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +73,9 @@ public class Base
         setContentView(R.layout.activity_base);
 
         initLayout();
-        permissionChecker();
         initConnectionInterface();
+        initListener();
+        permissionChecker();
     }
 
     private void initLayout(){
@@ -76,7 +83,9 @@ public class Base
         deviceListView = (ListView) findViewById(R.id.baseDeviceListView);
         searchButton = (Button) findViewById(R.id.baseSearchButton);
         searchProgress = (ProgressBar) findViewById(R.id.baseSearchingProgress);
+    }
 
+    private void initListener(){
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,8 +107,13 @@ public class Base
     }
 
     private void initConnectionInterface(){
-        p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
-        p2pChannel = p2pManager.initialize(this,getMainLooper(),null);
+        p2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        p2pChannel = p2pManager.initialize(this, getMainLooper(), null);
+
+
+        if(p2pManager == null || p2pChannel == null){
+            return;
+        }
 
         ConnectionManager.setP2pManager(p2pManager);
         ConnectionManager.setP2pChannel(p2pChannel);
@@ -114,9 +128,9 @@ public class Base
         wiFiStateReceiver.setListeners(this, this);
 
         discoverPeers = new ArrayList<>();
-        deviceNameList = new ArrayList<>();
+        deviceNameList = new ArrayList<String>();
 
-        deviceListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, deviceNameList);
+        deviceListAdapter = new DeviceListAdapter(this, R.layout.item_device_list, deviceNameList);
         deviceListView.setAdapter(deviceListAdapter);
     }
 
@@ -128,6 +142,22 @@ public class Base
         if(!Permission.has(this, Permission.WRITE_STORAGE)){
             Permission.request(this, Permission.WRITE_STORAGE, PERMISSION_FILE_WRITE);
         }
+        if(!Permission.has(this, Permission.ACCESS_WIFI_STATE)){
+            Permission.request(this, Permission.ACCESS_WIFI_STATE, PERMISSION_ACCESS_WIFI_STATE);
+        }
+        if(!Permission.has(this, Permission.CHANGE_WIFI_STATE)){
+            Permission.request(this, Permission.CHANGE_WIFI_STATE, PERMISSION_CHANGE_WIFI_STATE);
+        }
+        if(!Permission.has(this, Permission.INTERNET)){
+            Permission.request(this, Permission.INTERNET, PERMISSION_INTERNET);
+        }
+        if(!Permission.has(this, Permission.ACCESS_NETWORK_STATE)){
+            Permission.request(this, Permission.ACCESS_NETWORK_STATE, PERMISSION_ACCESS_NETWORK_STATE);
+        }
+        if(!Permission.has(this, Permission.CHANEGE_NETWORK_STATE)){
+            Permission.request(this, Permission.CHANEGE_NETWORK_STATE, PERMISSOIN_CHANGE_NETWORK_STATE);
+        }
+
 
     }
 
@@ -146,20 +176,30 @@ public class Base
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == PERMISSION_FILE_READ){
-            if(Permission.isGranted(grantResults)){
-
-            }
-            else{
-                Permission.request(this,Permission.ACCESS_WIFI_STATE, PERMISSION_FILE_READ);
+            if(!Permission.isGranted(grantResults)){
+                Permission.request(this,Permission.READ_STORAGE, PERMISSION_FILE_READ);
             }
         }
 
         if(requestCode == PERMISSION_FILE_WRITE){
-            if(Permission.isGranted(grantResults)){
-
+            if(!Permission.isGranted(grantResults)){
+                Permission.request(this,Permission.WRITE_STORAGE, PERMISSION_FILE_WRITE);
             }
-            else{
-                Permission.request(this,Permission.ACCESS_WIFI_STATE, PERMISSION_FILE_WRITE);
+        }
+        if(requestCode == PERMISSION_ACCESS_WIFI_STATE){
+            if(Permission.isGranted(grantResults)){
+                Permission.request(this,Permission.ACCESS_WIFI_STATE, PERMISSION_ACCESS_WIFI_STATE);
+            }
+        }
+        if(requestCode == PERMISSION_CHANGE_WIFI_STATE) {
+            if(! Permission.isGranted(grantResults)) {
+                Permission.request(this,Permission.CHANGE_WIFI_STATE, PERMISSION_CHANGE_WIFI_STATE);
+            }
+
+        }
+        if(requestCode == PERMISSION_INTERNET) {
+            if(!Permission.isGranted(grantResults)) {
+                Permission.request(this,Permission.CHANGE_WIFI_STATE, PERMISSION_INTERNET);
             }
         }
     }
@@ -203,7 +243,7 @@ public class Base
         if(info.isGroupOwner && info.groupFormed){
             initSocketInterface(info.groupOwnerAddress, true);
         }
-        else {
+        else if (info.groupFormed) {
             initSocketInterface(info.groupOwnerAddress, false);
         }
 
@@ -213,6 +253,7 @@ public class Base
     public void onPeersAvailable(WifiP2pDeviceList peers) {
         searchProgress.setVisibility(View.GONE);
         if(discoverPeers.isEmpty() || !discoverPeers.equals(peers)){
+
             discoverPeers.clear();
             deviceNameList.clear();
             deviceListAdapter.notifyDataSetChanged();
@@ -221,7 +262,7 @@ public class Base
             for(WifiP2pDevice device : discoverPeers){
                 deviceNameList.add(device.deviceName);
             }
-            deviceListView.setVisibility(View.VISIBLE);
+
             deviceListAdapter.notifyDataSetChanged();
 
             Log.d(TAG, "peer list collected");
@@ -242,4 +283,6 @@ public class Base
         }
         return false;
     }
+
+
 }

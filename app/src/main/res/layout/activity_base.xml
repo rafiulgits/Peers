@@ -7,18 +7,10 @@
     android:layout_height="match_parent"
     tools:context="sakkhat.in.peers.Base">
 
-    <ListView
-        android:id="@+id/baseDeviceListView"
-        android:visibility="gone"
-        android:layout_above="@id/baseSearchButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
-
     <TextView
         android:id="@+id/baseText"
         android:text="Lets\nConnect\nTogether"
-        android:textColor="#fff"
+        android:textColor="#ffffff"
         android:layout_alignParentTop="true"
         android:textSize="50sp"
         android:layout_marginTop="20dp"
@@ -27,19 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ProgressBar
-        android:id="@+id/baseSearchingProgress"
-        android:visibility="gone"
-        android:indeterminate="true"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
-
     <Button
         android:id="@+id/baseSearchButton"
-        android:backgroundTint="#fff"
+        android:backgroundTint="#ffffff"
         android:paddingTop="20sp"
         android:paddingBottom="20sp"
         android:textSize="20sp"
@@ -51,6 +33,28 @@
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:id="@+id/baseDeviceListView"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_above="@id/baseSearchButton"
+        android:layout_below="@id/baseText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
+
+    <ProgressBar
+        android:id="@+id/baseSearchingProgress"
+        android:visibility="gone"
+        android:indeterminate="true"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
 
 </RelativeLayout>

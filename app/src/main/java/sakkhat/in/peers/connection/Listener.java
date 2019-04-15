@@ -16,6 +16,8 @@ public interface Listener {
     public static final int SENDING_QUEUE_CLEARED = 8;
     public static final int ERROR = 0;
     public static final int SOCKET_ESTABLISHED = 9;
+    public static final int SUCCESS = 10;
 
     public void execute();
+    public void terminate();
 }

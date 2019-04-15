@@ -80,6 +80,11 @@ public class FileSender implements Listener, Runnable {
     }
 
     @Override
+    public void terminate(){
+
+    }
+
+    @Override
     public void execute() {
         engine = new Thread(this);
         engine.start();
