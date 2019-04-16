@@ -13,7 +13,7 @@ import java.net.Socket;
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class FileSender implements Listener, Runnable {
+public class FileSender implements Listener, Runnable, Joiner {
 
     private Thread engine;
     private Handler handler;
@@ -79,9 +79,25 @@ public class FileSender implements Listener, Runnable {
 
     }
 
+    public void join(){
+        try {
+            engine.join();
+        } catch (InterruptedException e) {
+            handler.obtainMessage(ERROR).sendToTarget();
+        }
+    }
+
     @Override
     public void terminate(){
+        engine.interrupt();
+    }
 
+    @Override
+    public boolean isExecuting(){
+        if(engine.isAlive() && !engine.isInterrupted()){
+            return true;
+        }
+        return false;
     }
 
     @Override

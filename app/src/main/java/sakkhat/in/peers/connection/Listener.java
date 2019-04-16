@@ -18,6 +18,10 @@ public interface Listener {
     public static final int SOCKET_ESTABLISHED = 9;
     public static final int SUCCESS = 10;
 
+    public static final int RECEIVING_COMPLETED = 11;
+    public static final int SENDING_COMPLETED = 12;
+
     public void execute();
+    public boolean isExecuting();
     public void terminate();
 }

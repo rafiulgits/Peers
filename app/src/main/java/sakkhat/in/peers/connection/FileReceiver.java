@@ -14,10 +14,11 @@ import java.net.Socket;
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class FileReceiver implements Listener, Cloneable {
+public class FileReceiver implements Listener, Cloneable, Runnable,Joiner {
     public static String PATH = Environment.getExternalStorageDirectory()+"/p2p";
 
     private Handler handler;
+    private Thread engine;
 
     private FileReceiver(Handler handler){
         this.handler = handler;
@@ -28,7 +29,7 @@ public class FileReceiver implements Listener, Cloneable {
     }
 
     @Override
-    public void execute() {
+    public void run() {
         if(! ConnectionManager.isEastablished()){
             handler.obtainMessage(SOCKET_ERROR).sendToTarget();
             return;
@@ -85,8 +86,30 @@ public class FileReceiver implements Listener, Cloneable {
     }
 
     @Override
-    public void terminate(){
+    public void execute() {
+        engine = new Thread(this);
+        engine.start();
+    }
 
+    @Override
+    public void terminate(){
+        engine.interrupt();
+    }
+
+    public void join(){
+        try {
+            engine.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isExecuting(){
+        if(engine.isAlive() && !engine.isInterrupted()){
+            return true;
+        }
+        return false;
     }
 
     @Override

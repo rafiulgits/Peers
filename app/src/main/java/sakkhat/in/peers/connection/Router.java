@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -17,14 +18,16 @@ import sakkhat.in.peers.views.Index;
 public class Router {
 
     public static class Receiver implements Listener, Runnable {
-        private static final String TAG = "router_sender";
+        private static final String TAG = "router_receiver";
         private Thread engine;
         private Handler handler;
 
+        private FileReceiver fileReceiver;
 
 
         private Receiver(Handler handler){
             this.handler = handler;
+            fileReceiver = FileReceiver.init(handler);
         }
 
         public static Receiver init(Handler handler){
@@ -41,16 +44,14 @@ public class Router {
 
             try{
                 DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-                int command = dataInputStream.readInt();
-                while (socket != null || socket.isConnected()){
-                    if(command == Index.GOTO_FILE_SHARING){
-                        handler.obtainMessage(Index.GOTO_FILE_SHARING).sendToTarget();
-                    }
-                    else if(command == Index.GOTO_CONTROL_SHARING) {
-                        handler.obtainMessage(Index.GOTO_CONTROL_SHARING).sendToTarget();
-                    }
-                    continue;
+                short command = dataInputStream.readShort();
+                if(command == FILE_RECEIVE_REQUEST){
+                    FileReceiver fileReceiverClone = (FileReceiver) fileReceiver.clone();
+                    fileReceiverClone.execute();
+                    fileReceiverClone.join();
+                    handler.obtainMessage(RECEIVING_COMPLETED).sendToTarget();
                 }
+
             } catch(IOException ex){
                 handler.obtainMessage(SOCKET_ERROR).sendToTarget();
             }
@@ -61,6 +62,14 @@ public class Router {
         public void execute() {
             engine = new Thread(this);
             engine.start();
+        }
+
+        @Override
+        public boolean isExecuting(){
+            if(engine.isAlive() && !engine.isInterrupted()){
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -78,7 +87,7 @@ public class Router {
         private static final String TAG = "router_sender";
         private Thread engine;
         private Handler handler;
-        private volatile int command;
+        private int command;
 
         private Sender(Handler handler, int command){
             this.handler = handler;
@@ -94,13 +103,12 @@ public class Router {
             if(!ConnectionManager.isEastablished()){
                 return;
             }
-            Socket socket = ConnectionManager.getSocket();
-            try{
-                DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-                dataOutputStream.writeInt(command);
 
-            } catch (IOException ex){
-                Log.e(TAG, "something went wrong");
+            if(command == Index.FILE_SHARE){
+                FileSender fileSender = FileSender.init(handler, Index.sendingQueue);
+                fileSender.execute();
+                fileSender.join();
+                handler.obtainMessage(SENDING_COMPLETED).sendToTarget();
             }
         }
 
@@ -108,6 +116,14 @@ public class Router {
         public void execute() {
             engine = new Thread(this);
             engine.start();
+        }
+
+        @Override
+        public boolean isExecuting(){
+            if(engine.isAlive() && !engine.isInterrupted()){
+                return true;
+            }
+            return false;
         }
 
         @Override

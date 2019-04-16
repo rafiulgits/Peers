@@ -36,13 +36,17 @@ public class Index extends AppCompatActivity
     private static final int FILE_SELECT = 2;
     private static final int CAMERA_SELECT = 3;
 
+    public static final int FILE_SHARE = 4;
+    public static final int CAMERA_SHARE = 5;
+
     private FloatingActionButton pickFile, selectStograge, ioProgress, cameraFrame;
 
     private Button disconnect;
     private Router.Sender sender;
     private Router.Receiver receiver;
     private Handler handler;
-    private volatile FileQueue sendingQueue;
+
+    public static volatile FileQueue sendingQueue = FileQueue.init();
 
     private BottomSheetBehavior bottomSheet;
 
@@ -53,7 +57,7 @@ public class Index extends AppCompatActivity
 
         initLayout();
         handler = new Handler(this);
-        sendingQueue = FileQueue.init();
+
         clickEvents();
         listenSocket();
     }
@@ -117,6 +121,8 @@ public class Index extends AppCompatActivity
     private void listenSocket(){
         receiver = Router.Receiver.init(handler);
         receiver.execute();
+
+
     }
 
     private void initBottomSheet(){
@@ -156,6 +162,8 @@ public class Index extends AppCompatActivity
                 File selectedFile = new File(path);
                 sendingQueue.enqueue(selectedFile);
                 Toast.makeText(this, "selected: "+selectedFile.getName(), Toast.LENGTH_SHORT).show();
+                sender = Router.Sender.init(handler, FILE_SHARE);
+                sender.execute();
             }
             else {
                 Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();

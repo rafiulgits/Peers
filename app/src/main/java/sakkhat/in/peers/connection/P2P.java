@@ -51,6 +51,14 @@ public class P2P {
         }
 
         @Override
+        public boolean isExecuting(){
+            if(engine.isAlive() && !engine.isInterrupted()){
+                return true;
+            }
+            return false;
+        }
+
+        @Override
         public void terminate(){
 
         }
@@ -90,6 +98,13 @@ public class P2P {
         public void execute() {
             engine = new Thread(this);
             engine.start();
+        }
+        @Override
+        public boolean isExecuting(){
+            if(engine.isAlive() && !engine.isInterrupted()){
+                return true;
+            }
+            return false;
         }
 
         @Override

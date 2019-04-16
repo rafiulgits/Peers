@@ -51,5 +51,7 @@ public class ConnectionManager {
     public static void disconnect(WifiP2pManager.ActionListener actionListener){
         socket = null;
         p2pManager.removeGroup(p2pChannel, actionListener);
+        p2pManager.cancelConnect(p2pChannel, actionListener);
+        p2pChannel = null;
     }
 }
