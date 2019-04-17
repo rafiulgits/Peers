@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_file_share"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/jarvis"
+    tools:context="sakkhat.in.peers.views.FileShare">
+
+    <TextView
+        android:id="@+id/fileShareText"
+        android:text="File\nShare"
+        android:textSize="50sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="28dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/pickFile"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="#ffffff"
+        android:text="Pick A File"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/storePath"
+        android:text="Store Path"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:background="#ffffff"
+        android:layout_above="@id/pickFile"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/fileIOListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"></ListView>
+
+</RelativeLayout>
