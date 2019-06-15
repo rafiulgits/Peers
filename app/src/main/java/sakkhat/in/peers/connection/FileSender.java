@@ -44,7 +44,6 @@ public class FileSender implements Listener, Runnable, Joiner {
                 File file = fileQueue.dequeue();
 
                 dataOutputStream.writeShort(FILE_RECEIVE_REQUEST);
-                dataOutputStream.writeShort(FILE_INFO);
                 dataOutputStream.writeUTF(file.getName());
                 dataOutputStream.writeLong(file.length());
 

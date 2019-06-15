@@ -21,13 +21,17 @@ public class P2P {
 
         private Thread engine;
         private Handler handler;
+        private static Server server;
 
         private Server(Handler handler){
             this.handler = handler;
         }
 
         public static Server init(Handler handler){
-            return new Server(handler);
+            if(server == null){
+                server = new Server(handler);
+            }
+            return server;
         }
 
         @Override
@@ -71,6 +75,7 @@ public class P2P {
         private Thread engine;
         private InetAddress host;
         private Handler handler;
+        private static Client client;
 
         private Client(InetAddress host, Handler handler) {
             this.host = host;
@@ -78,7 +83,10 @@ public class P2P {
         }
 
         public static Client init(InetAddress host, Handler handler){
-            return new Client(host, handler);
+            if (client == null){
+                return new Client(host, handler);
+            }
+            return client;
         }
 
         @Override

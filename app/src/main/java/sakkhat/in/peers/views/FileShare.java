@@ -11,14 +11,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import lib.folderpicker.FolderPicker;
 import sakkhat.in.peers.R;
 import sakkhat.in.peers.connection.FileQueue;
 import sakkhat.in.peers.connection.FileReceiver;
 import sakkhat.in.peers.connection.FileSender;
+import sakkhat.in.peers.connection.Listener;
 import sakkhat.in.peers.connection.Router;
 import sakkhat.in.peers.generic.FileUtil;
+import sakkhat.in.peers.model.FileIO;
 
 public class FileShare extends AppCompatActivity
     implements Handler.Callback{
@@ -32,7 +35,11 @@ public class FileShare extends AppCompatActivity
 
     private Handler handler;
     private Router.Receiver routerReceiver;
+    private FileSender fileSender;
     private volatile FileQueue sendingQueue;
+
+    private ArrayList<FileIO> fileIOList;
+    private int receivingIndex, sendingIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +49,8 @@ public class FileShare extends AppCompatActivity
         initLayout();
         handler = new Handler(this);
         sendingQueue = FileQueue.init();
+        initRouter();
         initClickEvents();
-
     }
 
     private void initLayout(){
@@ -75,6 +82,7 @@ public class FileShare extends AppCompatActivity
 
     private void initRouter(){
         routerReceiver = Router.Receiver.init(handler);
+        fileIOList = new ArrayList<>();
     }
 
     @Override
@@ -86,7 +94,10 @@ public class FileShare extends AppCompatActivity
             if(path != null){
                 File selectedFile = new File(path);
                 sendingQueue.enqueue(selectedFile);
-                FileSender.init(handler, sendingQueue);
+                fileSender = FileSender.init(handler, sendingQueue);
+                sendingIndex = fileIOList.size();
+                fileIOList.add(FileIO.init(selectedFile.getName(), FileIO.SENDING));
+                // adapter
                 Toast.makeText(this, "selected: "+selectedFile.getName(), Toast.LENGTH_SHORT).show();
             }
             else {
@@ -101,7 +112,22 @@ public class FileShare extends AppCompatActivity
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what){
-            
+            case Listener.FILE_RECEIVE_REQUEST:
+                String name = (String) msg.obj;
+                receivingIndex = fileIOList.size();
+                fileIOList.add(FileIO.init(name, FileIO.RECEIVING));
+                // adapter
+                return true;
+
+            case Listener.FILE_RECEIVED:
+                fileIOList.get(receivingIndex).setStreaming(false);
+                // adapter update
+                return true;
+
+            case Listener.FILE_SENT:
+                fileIOList.get(sendingIndex).setStreaming(false);
+                // adapter
+                return true;
         }
         return false;
     }
