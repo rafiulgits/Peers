@@ -5,7 +5,7 @@
     android:background="@color/jarvis"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sakkhat.in.peers.views.Base">
+    tools:context="sakkhat.in.peers.views.Index">
 
     <TextView
         android:id="@+id/baseText"

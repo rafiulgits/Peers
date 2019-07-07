@@ -18,6 +18,8 @@ public class ConnectionManager {
     private static WifiP2pManager p2pManager;
     private static WifiP2pManager.Channel p2pChannel;
 
+
+
     public static synchronized void setSocket(Socket socket){
         ConnectionManager.socket = socket;
     }

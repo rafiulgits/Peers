@@ -16,14 +16,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/FullScreen">
-        <activity android:name=".views.Base">
+        <activity android:name=".views.Index">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.Index" />
         <activity android:name=".views.FileShare" />
         <activity android:name=".views.CameraShare"></activity>
     </application>

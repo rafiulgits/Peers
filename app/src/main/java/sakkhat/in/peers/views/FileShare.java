@@ -23,7 +23,7 @@ import sakkhat.in.peers.connection.Router;
 import sakkhat.in.peers.generic.FileUtil;
 import sakkhat.in.peers.model.FileIO;
 
-public class FileShare extends AppCompatActivity
+public class FileShare extends Template
     implements Handler.Callback{
 
     private static final int FILE_CHOOSE_REQUEST = 5;
@@ -44,22 +44,22 @@ public class FileShare extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_file_share);
+        loadTemplate(R.layout.activity_file_share);
 
-        initLayout();
         handler = new Handler(this);
         sendingQueue = FileQueue.init();
         initRouter();
-        initClickEvents();
     }
 
-    private void initLayout(){
+    @Override
+    public void initLayout(){
         pickFile = (Button) findViewById(R.id.pickFile);
         storePath = (Button) findViewById(R.id.storePath);
         fileIOListView = (ListView) findViewById(R.id.fileIOListView);
     }
 
-    private void initClickEvents(){
+    @Override
+    public void initListeners(){
         pickFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
