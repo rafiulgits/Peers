@@ -1,6 +1,6 @@
 # Peers
 
-## Pattern we used:
+## Patterns we used:
  * Template in View
  * Singleton in Socket (Client-Server) and Socket Routing
  * Factory in Adapter
