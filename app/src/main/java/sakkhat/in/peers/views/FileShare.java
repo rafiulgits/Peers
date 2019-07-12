@@ -3,7 +3,6 @@ package sakkhat.in.peers.views;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +17,7 @@ import sakkhat.in.peers.R;
 import sakkhat.in.peers.connection.FileQueue;
 import sakkhat.in.peers.connection.FileReceiver;
 import sakkhat.in.peers.connection.FileSender;
-import sakkhat.in.peers.connection.Listener;
+import sakkhat.in.peers.connection.Engine;
 import sakkhat.in.peers.connection.Router;
 import sakkhat.in.peers.generic.FileUtil;
 import sakkhat.in.peers.model.FileIO;
@@ -112,19 +111,19 @@ public class FileShare extends Template
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what){
-            case Listener.FILE_RECEIVE_REQUEST:
+            case Engine.FILE_RECEIVE_REQUEST:
                 String name = (String) msg.obj;
                 receivingIndex = fileIOList.size();
                 fileIOList.add(FileIO.init(name, FileIO.RECEIVING));
                 // adapter
                 return true;
 
-            case Listener.FILE_RECEIVED:
+            case Engine.FILE_RECEIVED:
                 fileIOList.get(receivingIndex).setStreaming(false);
                 // adapter update
                 return true;
 
-            case Listener.FILE_SENT:
+            case Engine.FILE_SENT:
                 fileIOList.get(sendingIndex).setStreaming(false);
                 // adapter
                 return true;

@@ -14,7 +14,7 @@ import java.util.List;
 
 import sakkhat.in.peers.R;
 
-public class DeviceListAdapter extends ArrayAdapter<String> {
+public class DeviceListAdapter extends Adapter<String> {
 
     private Context context;
     private int layoutID;

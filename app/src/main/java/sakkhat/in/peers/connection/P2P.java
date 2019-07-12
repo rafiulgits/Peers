@@ -15,7 +15,7 @@ import java.net.Socket;
 public class P2P {
     private static final int PORT = 7878;
 
-    public static class Server implements Runnable, Listener {
+    public static class Server implements Runnable, Engine {
 
         private static final String TAG ="p2p_server";
 
@@ -68,7 +68,7 @@ public class P2P {
         }
     }
 
-    public static class Client implements Runnable,Listener {
+    public static class Client implements Runnable,Engine {
 
         private static final String TAG = "p2p_client";
 

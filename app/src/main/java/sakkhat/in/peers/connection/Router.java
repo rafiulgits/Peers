@@ -13,12 +13,13 @@ import java.net.Socket;
 
 public class Router {
 
-    public static class Receiver implements Listener, Runnable {
+    public static class Receiver implements Engine, Runnable {
         private static final String TAG = "router_receiver";
         private Thread engine;
         private Handler handler;
 
         private FileReceiver fileReceiver;
+        protected static Receiver receiver;
 
 
         private Receiver(Handler handler) {
@@ -27,7 +28,13 @@ public class Router {
         }
 
         public static Receiver init(Handler handler) {
-            return new Receiver(handler);
+            if(receiver!= null){
+                return receiver;
+            }
+            else{
+                receiver = new Receiver(handler);
+                return receiver;
+            }
         }
 
         @Override

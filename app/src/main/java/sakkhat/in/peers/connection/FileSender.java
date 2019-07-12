@@ -13,7 +13,7 @@ import java.net.Socket;
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class FileSender implements Listener, Runnable, Joiner {
+public class FileSender implements Engine, Runnable, Listener {
 
     private Thread engine;
     private Handler handler;

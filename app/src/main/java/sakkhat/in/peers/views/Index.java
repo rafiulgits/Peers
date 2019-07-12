@@ -28,7 +28,7 @@ import java.util.List;
 import sakkhat.in.peers.R;
 import sakkhat.in.peers.adapter.DeviceListAdapter;
 import sakkhat.in.peers.broadcaster.WiFiStateReceiver;
-import sakkhat.in.peers.connection.Listener;
+import sakkhat.in.peers.connection.Engine;
 import sakkhat.in.peers.connection.ConnectionManager;
 import sakkhat.in.peers.connection.P2P;
 import sakkhat.in.peers.generic.Permission;
@@ -156,8 +156,6 @@ public class Index
         if(!Permission.has(this, Permission.CHANEGE_NETWORK_STATE)){
             Permission.request(this, Permission.CHANEGE_NETWORK_STATE, PERMISSOIN_CHANGE_NETWORK_STATE);
         }
-
-
     }
 
     private void initSocketInterface(InetAddress address, boolean isOwner){
@@ -271,11 +269,11 @@ public class Index
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what){
-            case Listener.SOCKET_ERROR:
+            case Engine.SOCKET_ERROR:
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 return true;
 
-            case Listener.SOCKET_ESTABLISHED:
+            case Engine.SOCKET_ESTABLISHED:
                 this.finish();
                 startActivity(new Intent(this, FileShare.class));
                 return true;

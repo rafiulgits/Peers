@@ -14,7 +14,7 @@ import java.net.Socket;
  * Created by Rafiul Islam on 13-Apr-19.
  */
 
-public class FileReceiver implements Listener, Cloneable, Runnable,Joiner {
+public class FileReceiver implements Engine,Cloneable, Runnable,Listener {
     public static String PATH = Environment.getExternalStorageDirectory()+"/p2p";
 
     private Handler handler;
